@@ -8,6 +8,8 @@ interface Tab {
 
 const TabManager = () => {
   const [savedTabs, setSavedTabs] = useState<Tab[]>([]);
+  const [customTitle, setCustomTitle] = useState(''); // State for custom title input
+
   useEffect(() => {
     updateTabList();
   }, []);
@@ -24,11 +26,18 @@ const TabManager = () => {
   const saveTab = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tab = tabs[0]; // Get the active tab
+      const titleToSave = customTitle || tab.title || 'Untitled';
       chrome.storage.local.get(['savedTabs'], (result) => {
         let savedTabs = result.savedTabs || []; // Get existing saved tabs
-        savedTabs.push(tab); // Add the current tab to the list
+        const tabData = {
+          url: tab.url,
+          title: titleToSave,
+          id: tab.id,
+        };
+        savedTabs.push(tabData); // Add the current tab to the list
         chrome.storage.local.set({ savedTabs: savedTabs }, () => {
           updateTabList(); // Update the tab list after saving
+          setCustomTitle('');
         });
       });
     });
@@ -43,6 +52,14 @@ const TabManager = () => {
 
   return (
     <div>
+      <div>
+      <input
+        type="text"
+        placeholder="Enter a custom title"
+        value={customTitle}
+        onChange={(e) => setCustomTitle(e.target.value)}
+      />
+      </div>
       {/* Button to save the current tab */}
       <button onClick={saveTab}>Save Current Tab</button>
 

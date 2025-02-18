@@ -3,7 +3,8 @@
 
 
 # TODO List
-- [ ] Save select tabs
+- [x] Save select tabs
+- [ ] Switch to tabs
 - [ ] Delete all tabs button
 - [ ] Delete select tabs
 - [ ] Save all tabs button
