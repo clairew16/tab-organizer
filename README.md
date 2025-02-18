@@ -8,3 +8,6 @@
 - [ ] Delete select tabs
 - [ ] Save all tabs button
 - [ ] Save tabs under respective windows/folders/groups
+
+# To build
+npm run build
